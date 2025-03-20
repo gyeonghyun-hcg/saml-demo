@@ -3,6 +3,11 @@
 ```bash
 docker run -p 8081:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:26.1.4 start-dev
 ```
+### keyclock reaml 설정
+- `http://localhost:8081` 접속
+- `admin/admin`으로 로그인
+- 새로운 realm 생성
+- Reousrce file에 해당 레포의 `keycloak-realm/realm-export.json` 파일을 업로드하여 생성
 
 ## Endpoint
 ### 로그인
