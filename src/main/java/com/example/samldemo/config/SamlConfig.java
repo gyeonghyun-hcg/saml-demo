@@ -18,6 +18,7 @@ import org.springframework.security.saml2.provider.service.registration.InMemory
 import org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistration;
 import org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistrationRepository;
 import org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistrations;
+import org.springframework.security.saml2.provider.service.registration.Saml2MessageBinding;
 import org.springframework.security.saml2.provider.service.web.DefaultRelyingPartyRegistrationResolver;
 import org.springframework.security.saml2.provider.service.web.RelyingPartyRegistrationResolver;
 import org.springframework.security.saml2.provider.service.web.authentication.OpenSaml4AuthenticationRequestResolver;
@@ -38,7 +39,8 @@ public class SamlConfig {
     RelyingPartyRegistration registration = RelyingPartyRegistrations
         .fromMetadata(resource.getInputStream())
         .registrationId("keycloak")
-        .authnRequestsSigned(false)
+        .singleLogoutServiceLocation("http://localhost:8080/logout/saml2/slo")
+        .singleLogoutServiceBinding(Saml2MessageBinding.POST)
         .build();
 
     return new InMemoryRelyingPartyRegistrationRepository(registration);
@@ -72,6 +74,9 @@ public class SamlConfig {
                       }
                     }
         )
+        .saml2Logout(logout -> logout
+            .logoutUrl("/logout")
+            .logoutRequest(request -> request.logoutUrl("/logout/saml2/slo")))
         .saml2Metadata(withDefaults());
     return http.build();
   }
